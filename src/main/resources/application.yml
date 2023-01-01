@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DB}?authSource=${MONGODB_RS}
+      database: ${MONGODB_DB}
+
+server:
+  port: 9091
