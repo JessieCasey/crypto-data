@@ -29,6 +29,7 @@ public class CSVServiceImpl implements CSVService {
         }
     }
 
+
     private List<String[]> createCsvDataSimple() {
         List<Crypto> cryptos = cryptoService.findAll();
 
@@ -37,8 +38,8 @@ public class CSVServiceImpl implements CSVService {
 
         for (int i = 0; i < cryptos.size(); ) {
             Crypto crypto = cryptos.get(i);
-            Float maxPrice = cryptoService.fetchCryptoWithTheMaxPrice(crypto.getName()).getContent().values().stream().findFirst().orElseThrow().getPrice();
-            Float minPrice = cryptoService.fetchCryptoWithTheLowestPrice(crypto.getName()).getContent().values().stream().findFirst().orElseThrow().getPrice();
+            Float maxPrice = cryptoService.fetchCryptoWithTheMaxPrice(crypto.getName()).getRecordPrice();
+            Float minPrice = cryptoService.fetchCryptoWithTheMinPrice(crypto.getName()).getRecordPrice();
 
             content.add(new String[]{++i + "", crypto.getName(), minPrice.toString(), maxPrice.toString()});
         }

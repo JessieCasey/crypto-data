@@ -4,5 +4,4 @@ import java.io.IOException;
 
 public interface CSVService {
     void generateCSVReport() throws IOException;
-
 }

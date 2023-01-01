@@ -1,5 +1,6 @@
 package com.crypto.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,5 +24,10 @@ public class CryptoResponseDTO {
                 .name(crypto.getName())
                 .content(Map.of(content, record))
                 .build();
+    }
+
+    @JsonIgnore
+    public Float getRecordPrice() {
+        return this.getContent().values().stream().findFirst().orElseThrow().getPrice();
     }
 }

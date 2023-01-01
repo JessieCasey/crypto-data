@@ -16,4 +16,6 @@ public interface CryptoRepository extends MongoRepository<Crypto, String> {
     List<Crypto> findAll();
 
     Crypto findByName(String name);
+
+    boolean existsByName(String name);
 }

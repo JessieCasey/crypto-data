@@ -3,7 +3,9 @@ package com.crypto.data.service.crypto;
 import com.crypto.data.entity.Crypto;
 import com.crypto.data.entity.CryptoPreviewDTO;
 import com.crypto.data.entity.CryptoResponseDTO;
+import com.crypto.data.exception.EntityNotFoundException;
 import com.crypto.data.repository.CryptoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,47 +16,69 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The CryptoServiceImpl class implements CryptoService interface to create methods {@link CryptoService}
+ */
+
 @Service
 public class CryptoServiceImpl implements CryptoService {
 
     private final CryptoRepository cryptoRepository;
 
+    @Autowired
     public CryptoServiceImpl(CryptoRepository cryptoRepository) {
         this.cryptoRepository = cryptoRepository;
     }
 
     @Override
-    public Map<String, Object> fetchCryptosWithPaginationAndSorting(String name, int page, int size) {
+    public Map<String, Object> fetchCryptosWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder) {
+        Pageable paging = PageRequest.of(pageNumber, size);
 
-        Pageable paging = PageRequest.of(page, size);
+        Page<Crypto> page;
+        if (name == null) page = cryptoRepository.findAll(paging);
+        else page = cryptoRepository.findByNameContainingIgnoreCase(name, paging);
 
-        Page<Crypto> pageTuts;
-        if (name == null) pageTuts = cryptoRepository.findAll(paging);
-        else pageTuts = cryptoRepository.findByNameContainingIgnoreCase(name, paging);
-
-        List<CryptoPreviewDTO> cryptos = pageTuts.getContent().stream().map(CryptoPreviewDTO::from).toList();
+        List<CryptoPreviewDTO> cryptos;
+        if (sortOrder.equals("ASC")) {
+            cryptos = page.getContent().stream()
+                    .sorted(Comparator.comparing(Crypto::getLastPrice))
+                    .map(CryptoPreviewDTO::from).toList();
+        } else {
+            cryptos = page.getContent().stream()
+                    .sorted(Comparator.comparing(Crypto::getLastPrice).reversed())
+                    .map(CryptoPreviewDTO::from).toList();
+        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("content", cryptos);
-        response.put("current_page", pageTuts.getNumber());
-        response.put("total_items", pageTuts.getTotalElements());
-        response.put("total_pages", pageTuts.getTotalPages());
+        response.put("current_page", page.getNumber());
+        response.put("total_items", page.getTotalElements());
+        response.put("total_pages", page.getTotalPages());
 
         return response;
     }
 
     @Override
-    public CryptoResponseDTO fetchCryptoWithTheLowestPrice(String name) {
-        Crypto byName = cryptoRepository.findByName(name);
+    public CryptoResponseDTO fetchCryptoWithTheMinPrice(String name) {
+        Crypto byName = findCryptoByName(name);
         Crypto.Record lowestPrice = byName.getPrices().stream().min(Comparator.comparing(Crypto.Record::getPrice)).get();
         return CryptoResponseDTO.from(byName, "lowest_price", lowestPrice);
     }
 
     @Override
     public CryptoResponseDTO fetchCryptoWithTheMaxPrice(String name) {
-        Crypto byName = cryptoRepository.findByName(name);
+        Crypto byName = findCryptoByName(name);
         Crypto.Record lowestPrice = byName.getPrices().stream().max(Comparator.comparing(Crypto.Record::getPrice)).get();
         return CryptoResponseDTO.from(byName, "highest_price", lowestPrice);
+    }
+
+    @Override
+    public Crypto findCryptoByName(String name) {
+        if (cryptoRepository.existsByName(name)) {
+            return cryptoRepository.findByName(name);
+        } else {
+            throw new EntityNotFoundException("Crypto with the name '" + name + "' is not found");
+        }
     }
 
     @Override

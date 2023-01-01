@@ -1,6 +1,5 @@
 package com.crypto.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,6 @@ public class Crypto {
 
     private String name;
 
-    @JsonProperty("last_price")
     private Float lastPrice;
 
     private List<Record> prices;
