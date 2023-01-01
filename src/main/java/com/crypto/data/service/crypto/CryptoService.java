@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface CryptoService {
-
     Crypto findCryptoByName(String name);
 
-    Map<String, Object> fetchCryptosWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder);
+    Map<String, Object> fetchCurrenciesWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder);
 
     CryptoResponseDTO fetchCryptoWithTheMinPrice(String name);
 

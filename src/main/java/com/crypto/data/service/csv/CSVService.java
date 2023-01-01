@@ -1,7 +1,7 @@
 package com.crypto.data.service.csv;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 
 public interface CSVService {
-    void generateCSVReport() throws IOException;
+    ByteArrayInputStream generateCSVReport();
 }

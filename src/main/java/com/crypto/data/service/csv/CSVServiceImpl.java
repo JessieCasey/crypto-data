@@ -2,48 +2,50 @@ package com.crypto.data.service.csv;
 
 import com.crypto.data.entity.Crypto;
 import com.crypto.data.service.crypto.CryptoService;
-import com.opencsv.CSVWriter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
 import org.springframework.stereotype.Service;
 
-import java.io.FileWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CSVServiceImpl implements CSVService {
 
+    private final String[] HEADERS = {"Count", "Cryptocurrency name", "Min Price", "Max Price"};
     private final CryptoService cryptoService;
 
     public CSVServiceImpl(CryptoService cryptoService) {
         this.cryptoService = cryptoService;
     }
 
-    @Override
-    public void generateCSVReport() throws IOException {
-        List<String[]> csvData = createCsvDataSimple();
-
-        try (CSVWriter writer = new CSVWriter(new FileWriter("./reports/report_" + LocalDate.now() + ".csv"))) {
-            writer.writeAll(csvData);
-        }
-    }
-
-
-    private List<String[]> createCsvDataSimple() {
+    public ByteArrayInputStream generateCSVReport() {
         List<Crypto> cryptos = cryptoService.findAll();
 
-        List<String[]> content = new ArrayList<>();
-        content.add(new String[]{"Count", "Cryptocurrency name", "Min Price", "Max Price"});
+        final CSVFormat format = CSVFormat.DEFAULT.withHeader(HEADERS);
 
-        for (int i = 0; i < cryptos.size(); ) {
-            Crypto crypto = cryptos.get(i);
-            Float maxPrice = cryptoService.fetchCryptoWithTheMaxPrice(crypto.getName()).getRecordPrice();
-            Float minPrice = cryptoService.fetchCryptoWithTheMinPrice(crypto.getName()).getRecordPrice();
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            CSVPrinter printer = new CSVPrinter(new PrintWriter(out), format);
 
-            content.add(new String[]{++i + "", crypto.getName(), minPrice.toString(), maxPrice.toString()});
+            int i = 0;
+            for (Crypto crypto : cryptos) {
+                Float max = cryptoService.fetchCryptoWithTheMaxPrice(crypto.getName()).getRecordPrice();
+                Float min = cryptoService.fetchCryptoWithTheMinPrice(crypto.getName()).getRecordPrice();
+
+                printer.printRecord(Arrays.asList(++i + "", crypto.getName(), min.toString(), max.toString()));
+            }
+
+            printer.flush();
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to import data to CSV file: " + e.getMessage());
         }
-
-        return content;
     }
 }

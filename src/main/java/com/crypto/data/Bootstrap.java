@@ -19,7 +19,6 @@ import java.util.TimeZone;
 
 /**
  * Bootstrap class initiates DB
- *
  * @author Artem Komarov
  */
 

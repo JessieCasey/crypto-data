@@ -31,7 +31,7 @@ public class CryptoServiceImpl implements CryptoService {
     }
 
     @Override
-    public Map<String, Object> fetchCryptosWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder) {
+    public Map<String, Object> fetchCurrenciesWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder) {
         Pageable paging = PageRequest.of(pageNumber, size);
 
         Page<Crypto> page;

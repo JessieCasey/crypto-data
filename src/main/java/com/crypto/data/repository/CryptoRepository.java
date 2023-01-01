@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface CryptoRepository extends MongoRepository<Crypto, String> {
-
     Page<Crypto> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     List<Crypto> findAll();
