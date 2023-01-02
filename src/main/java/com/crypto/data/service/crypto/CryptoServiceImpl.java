@@ -32,6 +32,9 @@ public class CryptoServiceImpl implements CryptoService {
 
     @Override
     public Map<String, Object> fetchCurrenciesWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder) {
+        if (pageNumber < 0) throw new IllegalArgumentException("'pageNumber' cannot be less than zero");
+        if (size <= 0) throw new IllegalArgumentException("'size' should be greater than zero");
+
         Pageable paging = PageRequest.of(pageNumber, size);
 
         Page<Crypto> page;
@@ -39,7 +42,7 @@ public class CryptoServiceImpl implements CryptoService {
         else page = cryptoRepository.findByNameContainingIgnoreCase(name, paging);
 
         List<CryptoPreviewDTO> cryptos;
-        if (sortOrder.equals("ASC")) {
+        if (sortOrder == null || sortOrder.equals("ASC")) {
             cryptos = page.getContent().stream()
                     .sorted(Comparator.comparing(Crypto::getLastPrice))
                     .map(CryptoPreviewDTO::from).toList();
