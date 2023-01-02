@@ -14,7 +14,7 @@ your machine
   docker-compose -f docker-mongoDB.yaml up
 ```
 
-The server runs on 9091 port, but if you have any conflicts, you can change it
+The server runs on `9091` port, but if you have any conflicts, you can change it
 ```
 #application.yml
 
@@ -54,20 +54,45 @@ downloaded after requesting the link.
 Postman:
 ![alt text](./imgs/img.png)
 Following the link in the browser:
+
 ![alt text](./imgs/img_2.png)
-Opening the CSV file after downloading int the IDE:
+
+Opening the CSV file after downloading it the IDE:
 ![alt text](./imgs/img_1.png)
 
 
 ---
-Let's try to receive a selected page with selected number of elements
+Let's try to receive a selected page with selected number of elements.
 
 `/api/cryptocurrencies?name=&page=0&size=3`
 
-![alt text](./imgs/img_3.png)
+```
+{
+    "total_pages": 1,
+    "total_items": 3,
+    "content": [
+        {
+            "id": "63b35f57b903bc178515b92b",
+            "name": "XRP",
+            "last_price": 0.33978
+        },
+        {
+            "id": "63b35f57b903bc178515b92a",
+            "name": "ETH",
+            "last_price": 1202.68
+        },
+        {
+            "id": "63b35f57b903bc178515b929",
+            "name": "BTC",
+            "last_price": 16680.3
+        }
+    ],
+    "current_page": 0
+}
+```
 
 ---
-You can get the `max` price of the currency (e.g. BTC)
+You can get the `max` price of the currency (e.g. BTC).
 
 `/api/cryptocurrencies/maxprice?name=BTC`
 
@@ -85,7 +110,7 @@ You can get the `max` price of the currency (e.g. BTC)
 ```
 
 ---
-Furthermore, you can fetch the `min` price of the currency (e.g. ETH)
+Furthermore, you can fetch the `min` price of the currency (e.g. ETH).
 
 `/api/cryptocurrencies/minprice?name=ETH`
 
