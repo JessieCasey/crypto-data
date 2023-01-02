@@ -38,6 +38,13 @@ public class GlobalHandlerException {
     }
 
     @ExceptionHandler
+    public ResponseEntity<?> handleDataNotEnoughException(DataNotFoundException ex, WebRequest request) {
+        log.error("[handleMethodNotAllowedException]: " + request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT.value())
+                .body(new MessageResponse(HttpStatus.NO_CONTENT.value(), ex.getMessage(), request));
+    }
+
+    @ExceptionHandler
     public ResponseEntity<?> handleException(Exception ex, WebRequest request) {
         log.error("[handleException]: " + request.getDescription(false));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())

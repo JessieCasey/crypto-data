@@ -1,11 +1,11 @@
 package com.crypto.data.service.csv;
 
 import com.crypto.data.entity.Crypto;
+import com.crypto.data.exception.DataNotFoundException;
 import com.crypto.data.service.crypto.CryptoService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.QuoteMode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -16,12 +16,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@Slf4j
 public class CSVServiceImpl implements CSVService {
 
     private final String[] HEADERS = {"Count", "Cryptocurrency name", "Min Price", "Max Price"};
     private final CryptoService cryptoService;
 
+    @Autowired
     public CSVServiceImpl(CryptoService cryptoService) {
         this.cryptoService = cryptoService;
     }
@@ -29,8 +29,11 @@ public class CSVServiceImpl implements CSVService {
     public ByteArrayInputStream generateCSVReport() {
         List<Crypto> cryptos = cryptoService.findAll();
 
-        final CSVFormat format = CSVFormat.DEFAULT.withHeader(HEADERS);
+        System.out.println(cryptos.size());
+        if (cryptos.size() == 0)
+            throw new DataNotFoundException("There is not enough data to create a CSV: The database is empty");
 
+        final CSVFormat format = CSVFormat.DEFAULT.withHeader(HEADERS);
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             CSVPrinter printer = new CSVPrinter(new PrintWriter(out), format);
 

@@ -7,12 +7,9 @@ import com.crypto.data.entity.CryptoResponseDTO;
 import com.crypto.data.exception.EntityNotFoundException;
 import com.crypto.data.repository.CryptoRepository;
 import com.crypto.data.service.crypto.CryptoService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,12 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = DataApplication.class)
-@Slf4j
 class CryptoServiceTests {
 
     @Autowired
@@ -36,7 +31,6 @@ class CryptoServiceTests {
 
     @BeforeAll
     public void setUp() {
-        log.debug("HERE");
         Crypto crypto1 = Crypto.builder().name("DOGE").lastPrice(0.83231f).prices(generateData(0.1f, 0.9f)).build();
         Crypto crypto2 = Crypto.builder().name("SHIB").lastPrice(0.0000865f).prices(generateData(0.000001f, 0.00009f)).build();
         Crypto crypto3 = Crypto.builder().name("SOL").lastPrice(9.97f).prices(generateData(8f, 12.2f)).build();
@@ -49,19 +43,6 @@ class CryptoServiceTests {
         cryptoRepository.deleteByName("DOGE");
         cryptoRepository.deleteByName("SHIB");
         cryptoRepository.deleteByName("SOL");
-    }
-
-    public List<Crypto.Record> generateData(float min, float max) {
-        List<Crypto.Record> record = new ArrayList<>();
-        record.add(Crypto.Record.builder().price(min).time(LocalDateTime.now()).build());
-        record.add(Crypto.Record.builder().price(max).time(LocalDateTime.now()).build());
-        for (int i = 0; i < 10; i++) {
-            record.add(Crypto.Record.builder()
-                    .price(ThreadLocalRandom.current().nextFloat(min, max))
-                    .time(LocalDateTime.now())
-                    .build());
-        }
-        return record;
     }
 
     @DisplayName("JUnit test: fetch Currencies With Pagination And Sorting method")
@@ -95,12 +76,12 @@ class CryptoServiceTests {
         Throwable t = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> cryptoService.fetchCurrenciesWithPaginationAndSorting("S", -1, 1, "ASC"));
 
-        Assertions.assertEquals("'pageNumber' cannot be less than zero", t.getMessage());
+        assertEquals("'pageNumber' cannot be less than zero", t.getMessage());
 
         Throwable t2 = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> cryptoService.fetchCurrenciesWithPaginationAndSorting("S", 0, -1, "ASC"));
 
-        Assertions.assertEquals("'size' should be greater than zero", t2.getMessage());
+        assertEquals("'size' should be greater than zero", t2.getMessage());
     }
 
     @DisplayName("JUnit test: fetch Crypto With The Min Price method")
@@ -159,17 +140,17 @@ class CryptoServiceTests {
         Throwable t = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> cryptoService.findCryptoByName(name));
 
-        Assertions.assertEquals("Crypto with the name '" + name + "' is not found", t.getMessage());
+        assertEquals("Crypto with the name '" + name + "' is not found", t.getMessage());
 
         Throwable t2 = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> cryptoService.findCryptoByName(null));
 
-        Assertions.assertEquals("Crypto with the name '" + "null" + "' is not found", t2.getMessage());
+        assertEquals("Crypto with the name '" + "null" + "' is not found", t2.getMessage());
 
         Throwable t3 = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> cryptoService.findCryptoByName("#$_5414"));
 
-        Assertions.assertEquals("Crypto with the name '" + "#$_5414" + "' is not found", t3.getMessage());
+        assertEquals("Crypto with the name '" + "#$_5414" + "' is not found", t3.getMessage());
     }
 
     @DisplayName("JUnit test: find All method")
@@ -178,4 +159,18 @@ class CryptoServiceTests {
         List<Crypto> all = cryptoService.findAll();
         Assertions.assertFalse(all.isEmpty());
     }
+
+    public List<Crypto.Record> generateData(float min, float max) {
+        List<Crypto.Record> record = new ArrayList<>();
+        record.add(Crypto.Record.builder().price(min).time(LocalDateTime.now()).build());
+        record.add(Crypto.Record.builder().price(max).time(LocalDateTime.now()).build());
+        for (int i = 0; i < 10; i++) {
+            record.add(Crypto.Record.builder()
+                    .price(ThreadLocalRandom.current().nextFloat(min, max))
+                    .time(LocalDateTime.now())
+                    .build());
+        }
+        return record;
+    }
+
 }
