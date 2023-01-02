@@ -53,13 +53,13 @@ public class CryptoController {
     }
 
     @GetMapping("/minprice")
-    public ResponseEntity<?> fetchCryptoWithTheLowestPrice(@RequestParam String name, WebRequest request) {
+    public ResponseEntity<?> fetchCryptoWithTheMinPrice(@RequestParam String name, WebRequest request) {
         log.info("[GET] Request to resource '/api/cryptocurrencies/minprice', method 'fetchCryptoWithTheLowestPrice'");
         if (!name.isEmpty()) {
             return ResponseEntity.ok(cryptoService.fetchCryptoWithTheMinPrice(name));
         } else {
             log.warn("[GET] Warning in method 'fetchCryptoWithTheLowestPrice'");
-            return ResponseEntity.badRequest().body(new MessageResponse("You need to provide cryptocurrency name in order to get the lowest price", request));
+            return ResponseEntity.badRequest().body(new MessageResponse("Provide cryptocurrency name in order to get the lowest price", request));
         }
     }
 
@@ -70,7 +70,7 @@ public class CryptoController {
             return ResponseEntity.ok(cryptoService.fetchCryptoWithTheMaxPrice(name));
         } else {
             log.warn("[GET] Warning in method 'fetchCryptoWithTheMaxPrice'");
-            return ResponseEntity.badRequest().body(new MessageResponse("You need to provide cryptocurrency name in order to get the highest price", request));
+            return ResponseEntity.badRequest().body(new MessageResponse("Provide cryptocurrency name in order to get the highest price", request));
         }
     }
 
