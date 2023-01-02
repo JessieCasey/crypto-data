@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 
 @RestController
@@ -79,8 +78,7 @@ public class CryptoController {
         log.info("[GET] Request to resource '/api/cryptocurrencies/csv', method 'generateCSVReport'");
         try {
             String filename = "report_" + LocalDate.now() + ".csv";
-            ByteArrayInputStream byteArrayInputStream = csvService.generateCSVReport();
-            InputStreamResource file = new InputStreamResource(byteArrayInputStream);
+            InputStreamResource file = new InputStreamResource(csvService.generateCSVReport());
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
