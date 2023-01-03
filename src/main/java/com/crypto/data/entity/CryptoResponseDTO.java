@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.Map;
 
+/**
+ * CryptoResponseDTO is DTO that represents an object {@link Crypto}
+ */
 @Getter
 @Setter
 @Builder

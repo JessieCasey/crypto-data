@@ -15,6 +15,10 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The CSVServiceImpl class implements CSVService interface to create methods to interact with CSV file {@link CSVService}
+ */
+
 @Service
 public class CSVServiceImpl implements CSVService {
 
@@ -25,6 +29,10 @@ public class CSVServiceImpl implements CSVService {
     public CSVServiceImpl(CryptoService cryptoService) {
         this.cryptoService = cryptoService;
     }
+
+    /**
+     * Method creates a CSV file with the headers [Count, Cryptocurrency Name, Min Price and Max Price]
+     */
 
     public ByteArrayInputStream generateCSVReport() {
         List<Crypto> cryptos = cryptoService.findAll();

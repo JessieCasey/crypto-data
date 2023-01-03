@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The CryptoServiceImpl class implements CryptoService interface to create methods {@link CryptoService}
+ * The CryptoServiceImpl class implements CryptoService interface to create methods to interact with Crypto entity {@link CryptoService}
  */
 
 @Service
@@ -38,7 +38,7 @@ public class CryptoServiceImpl implements CryptoService {
         Pageable paging = PageRequest.of(pageNumber, size);
 
         Page<Crypto> page;
-        if (name == null) page = cryptoRepository.findAll(paging);
+        if (name == null || !(name.trim().length() > 0)) page = cryptoRepository.findAll(paging);
         else page = cryptoRepository.findByNameContainingIgnoreCase(name, paging);
 
         List<CryptoPreviewDTO> cryptos;

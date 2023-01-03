@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * The CryptoRepository interface {@link Crypto}
+ */
+
 @Repository
 public interface CryptoRepository extends MongoRepository<Crypto, String> {
     Page<Crypto> findByNameContainingIgnoreCase(String name, Pageable pageable);

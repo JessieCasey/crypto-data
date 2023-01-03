@@ -1,5 +1,6 @@
 package com.crypto.data.exception;
 
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,13 @@ public class GlobalHandlerException {
         log.error("[handleMethodNotAllowedException]: " + request.getDescription(false));
         return ResponseEntity.status(HttpStatus.NO_CONTENT.value())
                 .body(new MessageResponse(HttpStatus.NO_CONTENT.value(), ex.getMessage(), request));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleValidationException(ValidationException ex, WebRequest request) {
+        log.error("[handleMethodNotAllowedException]: " + request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                .body(new MessageResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request));
     }
 
     @ExceptionHandler

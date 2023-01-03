@@ -3,11 +3,13 @@ package com.crypto.data.controller;
 import com.crypto.data.exception.MessageResponse;
 import com.crypto.data.service.crypto.CryptoService;
 import com.crypto.data.service.csv.CSVService;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDate;
 
+@Validated
 @RestController
 @RequestMapping("api/cryptocurrencies")
 @Slf4j
@@ -35,6 +38,15 @@ public class CryptoController {
         this.csvService = csvService;
     }
 
+    /**
+     * Method returns a selected page with selected number of elements (sorted by price from lowest to highest)
+     *
+     * @param name the name of the cryptocurrency (required = false)
+     * @param page page number (default = 0)
+     * @param size page size   (default = 10)
+     * @return ResponseEntity<Map < String, Object>>  in case of success.
+     */
+
     @GetMapping
     public ResponseEntity<?> fetchCurrenciesWithPaginationAndSorting(
             @RequestParam(required = false) String name,
@@ -51,8 +63,15 @@ public class CryptoController {
         }
     }
 
+    /**
+     * Method returns crypto details with the lowest price of the cryptocurrency
+     *
+     * @param name the name of the cryptocurrency
+     * @return ResponseEntity<CryptoResponseDTO> in case of success.
+     */
+
     @GetMapping("/minprice")
-    public ResponseEntity<?> fetchCryptoWithTheMinPrice(@RequestParam String name, WebRequest request) {
+    public ResponseEntity<?> fetchCryptoWithTheMinPrice(@RequestParam @NotBlank String name, WebRequest request) {
         log.info("[GET] Request to resource '/api/cryptocurrencies/minprice', method 'fetchCryptoWithTheLowestPrice'");
         if (!name.isEmpty()) {
             return ResponseEntity.ok(cryptoService.fetchCryptoWithTheMinPrice(name));
@@ -62,8 +81,15 @@ public class CryptoController {
         }
     }
 
+    /**
+     * Method returns crypto details with the highest price of the cryptocurrency
+     *
+     * @param name the name of the cryptocurrency
+     * @return ResponseEntity<CryptoResponseDTO> in case of success.
+     */
+
     @GetMapping("/maxprice")
-    public ResponseEntity<?> fetchCryptoWithTheMaxPrice(@RequestParam String name, WebRequest request) {
+    public ResponseEntity<?> fetchCryptoWithTheMaxPrice(@RequestParam @NotBlank String name, WebRequest request) {
         log.info("[GET] Request to resource '/api/cryptocurrencies/maxprice', method 'fetchCryptoWithTheMaxPrice'");
         if (!name.isEmpty()) {
             return ResponseEntity.ok(cryptoService.fetchCryptoWithTheMaxPrice(name));
@@ -73,6 +99,11 @@ public class CryptoController {
         }
     }
 
+    /**
+     * exportIntoCSV method generates CSV file.
+     *
+     * @return ResponseEntity with CSV file in body
+     */
     @GetMapping("/csv")
     public ResponseEntity<?> generateCSVReport(WebRequest request) {
         log.info("[GET] Request to resource '/api/cryptocurrencies/csv', method 'generateCSVReport'");

@@ -6,6 +6,10 @@ import com.crypto.data.entity.CryptoResponseDTO;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The CryptoService interface is required to create CryptoServiceImpl {@link CryptoServiceImpl}
+ */
+
 public interface CryptoService {
     Crypto findCryptoByName(String name);
 

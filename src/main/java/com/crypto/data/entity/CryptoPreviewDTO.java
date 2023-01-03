@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * CryptoPreviewDTO is DTO that represents an object {@link Crypto}
+ */
+
 @Getter
 @Setter
 @Builder
