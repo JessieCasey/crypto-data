@@ -20,6 +20,7 @@ import java.util.List;
 @Builder
 @ToString
 public class Crypto {
+
     @Id
     private String id;
 

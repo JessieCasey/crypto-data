@@ -39,13 +39,6 @@ class CSVServiceTests {
         cryptoRepository.saveAll(List.of(crypto1, crypto2, crypto3));
     }
 
-    @AfterAll
-    public void deleteAll() {
-        cryptoRepository.deleteByName("DOGE");
-        cryptoRepository.deleteByName("SHIB");
-        cryptoRepository.deleteByName("SOL");
-    }
-
     @DisplayName("JUnit test: generate CSV Report method")
     @Test
     public void generateCSVReport() {
@@ -74,5 +67,13 @@ class CSVServiceTests {
         }
         return record;
     }
+
+    @AfterAll
+    public void deleteAll() {
+        cryptoRepository.deleteByName("DOGE");
+        cryptoRepository.deleteByName("SHIB");
+        cryptoRepository.deleteByName("SOL");
+    }
+
 
 }

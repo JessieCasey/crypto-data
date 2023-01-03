@@ -104,6 +104,7 @@ public class CryptoController {
      *
      * @return ResponseEntity with CSV file in body
      */
+
     @GetMapping("/csv")
     public ResponseEntity<?> generateCSVReport(WebRequest request) {
         log.info("[GET] Request to resource '/api/cryptocurrencies/csv', method 'generateCSVReport'");

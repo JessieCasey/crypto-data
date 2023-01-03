@@ -16,9 +16,13 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 public class MessageResponse {
+
     private int statusCode;
+
     private Date timestamp;
+
     private String message;
+
     private String description;
 
     public MessageResponse(String message, WebRequest description) {

@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The CryptoServiceImpl class implements CryptoService interface to create methods to interact with Crypto entity {@link CryptoService}
+ * The CryptoServiceImpl class implements CryptoService interface
+ * to create methods to interact with Crypto entity {@link CryptoService}
  */
 
 @Service
@@ -88,4 +89,5 @@ public class CryptoServiceImpl implements CryptoService {
     public List<Crypto> findAll() {
         return cryptoRepository.findAll();
     }
+
 }

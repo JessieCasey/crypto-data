@@ -80,4 +80,5 @@ public class Bootstrap {
         long tmsp;
         Float price;
     }
+
 }

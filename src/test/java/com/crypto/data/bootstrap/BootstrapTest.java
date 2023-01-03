@@ -24,7 +24,7 @@ public class BootstrapTest {
     @Autowired
     Bootstrap bootstrap;
 
-    @DisplayName("JUnit test: Bootstrap.fetchResponse() and save in DB")
+    @DisplayName("JUnit test: Bootstrap.fetchResponse() and saving into DB")
     @Test
     public void fetchResponseTest() throws IOException {
         List<String> currencies = List.of("BTC", "ETH", "XRP");

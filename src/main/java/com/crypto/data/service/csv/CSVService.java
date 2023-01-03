@@ -8,4 +8,5 @@ import java.io.ByteArrayInputStream;
 
 public interface CSVService {
     ByteArrayInputStream generateCSVReport();
+
 }

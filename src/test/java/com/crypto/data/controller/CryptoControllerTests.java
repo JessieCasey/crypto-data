@@ -33,9 +33,14 @@ class CryptoControllerTests {
 
     @BeforeAll
     public void setUp() {
-        Crypto crypto1 = Crypto.builder().id("63b352df3935c55dfb97e86e").name("DOGE").lastPrice(0.83231f).prices(generateData(0.1f, 0.9f)).build();
-        Crypto crypto2 = Crypto.builder().id("89b352df3235c55dib97e85f").name("SHIB").lastPrice(0.0000865f).prices(generateData(0.000001f, 0.00009f)).build();
-        Crypto crypto3 = Crypto.builder().id("31b353df3837c55dfb97e85l").name("SOL").lastPrice(9.97f).prices(generateData(8f, 12.2f)).build();
+        Crypto crypto1 = Crypto.builder().id("63b352df3935c55dfb97e86e").name("DOGE")
+                .lastPrice(0.83231f).prices(generateData(0.1f, 0.9f)).build();
+
+        Crypto crypto2 = Crypto.builder().id("89b352df3235c55dib97e85f").name("SHIB")
+                .lastPrice(0.0000865f).prices(generateData(0.000001f, 0.00009f)).build();
+
+        Crypto crypto3 = Crypto.builder().id("31b353df3837c55dfb97e85l").name("SOL")
+                .lastPrice(9.97f).prices(generateData(8f, 12.2f)).build();
 
         cryptoRepository.saveAll(List.of(crypto1, crypto2, crypto3));
     }
@@ -43,6 +48,7 @@ class CryptoControllerTests {
     @DisplayName("JUnit test: fetch Crypto With The Lowest Price")
     @Test
     public void fetchCryptoWithTheLowestPrice() throws Exception {
+
         this.mockMvc.perform(get(PATH + "/minprice?name=DOGE"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MIN[0])));
@@ -59,6 +65,7 @@ class CryptoControllerTests {
     @DisplayName("JUnit test: fetch Crypto With The Highest Price")
     @Test
     public void fetchCryptoWithTheMaxPrice() throws Exception {
+
         this.mockMvc.perform(get(PATH + "/maxprice?name=DOGE"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MAX[0])));
@@ -75,6 +82,7 @@ class CryptoControllerTests {
     @DisplayName("JUnit test: fetch Crypto With The Highest and lowest Price with not exist name")
     @Test
     public void fetchCryptoWithTheMaxAndMaxPriceWithNotExist() throws Exception {
+
         String notExistedName = "12fkasd";
         this.mockMvc.perform(get(PATH + "/maxprice?name=" + notExistedName))
                 .andExpect(status().isNotFound())
@@ -88,6 +96,7 @@ class CryptoControllerTests {
     @DisplayName("JUnit test: fetch Crypto With The Highest and lowest Price with empty name")
     @Test
     public void fetchCryptoWithTheMaxAndMaxPriceWithEmpthy() throws Exception {
+
         String notExistedName = " ";
         this.mockMvc.perform(get(PATH + "/maxprice?name=" + notExistedName))
                 .andExpect(status().isBadRequest());
@@ -99,18 +108,22 @@ class CryptoControllerTests {
     @DisplayName("JUnit test: fetch Currencies With Pagination And Sorting")
     @Test
     public void fetchCurrenciesWithPaginationAndSorting() throws Exception {
+
         this.mockMvc.perform(get(PATH + "?name=S&page=0&size=2"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_PAGE)));
+
     }
 
     @DisplayName("JUnit test: generate CSV Report")
     @Test
     public void generateCSVReport() throws Exception {
+
         this.mockMvc.perform(get(PATH + "/csv"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Type", "application/csv"))
                 .andExpect(header().string("Content-Disposition", "attachment; filename=report_" + LocalDate.now() + ".csv"));
+
     }
 
     public List<Crypto.Record> generateData(float min, float max) {
@@ -135,14 +148,28 @@ class CryptoControllerTests {
     }
 
     String[] EXPECTED_MIN = {
-            "{\"id\":\"63b352df3935c55dfb97e86e\",\"name\":\"DOGE\",\"content\":{\"lowest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":0.1}}}",
-            "{\"id\":\"31b353df3837c55dfb97e85l\",\"name\":\"SOL\",\"content\":{\"lowest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":8.0}}}",
-            "{\"id\":\"89b352df3235c55dib97e85f\",\"name\":\"SHIB\",\"content\":{\"lowest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":1.0E-6}}}"};
+            "{\"id\":\"63b352df3935c55dfb97e86e\",\"name\":\"DOGE\",\"content\":" +
+                    "{\"lowest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":0.1}}}",
+
+            "{\"id\":\"31b353df3837c55dfb97e85l\",\"name\":\"SOL\",\"content\":" +
+                    "{\"lowest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":8.0}}}",
+
+            "{\"id\":\"89b352df3235c55dib97e85f\",\"name\":\"SHIB\",\"content\":" +
+                    "{\"lowest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":1.0E-6}}}"};
 
     String[] EXPECTED_MAX = {
-            "{\"id\":\"63b352df3935c55dfb97e86e\",\"name\":\"DOGE\",\"content\":{\"highest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":0.9}}}",
-            "{\"id\":\"31b353df3837c55dfb97e85l\",\"name\":\"SOL\",\"content\":{\"highest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":12.2}}}",
-            "{\"id\":\"89b352df3235c55dib97e85f\",\"name\":\"SHIB\",\"content\":{\"highest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":9.0E-5}}}"};
+            "{\"id\":\"63b352df3935c55dfb97e86e\",\"name\":\"DOGE\",\"content\":" +
+                    "{\"highest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":0.9}}}",
 
-    String EXPECTED_PAGE = "{\"total_pages\":1,\"total_items\":2,\"content\":[{\"id\":\"89b352df3235c55dib97e85f\",\"name\":\"SHIB\",\"last_price\":8.65E-5},{\"id\":\"31b353df3837c55dfb97e85l\",\"name\":\"SOL\",\"last_price\":9.97}],\"current_page\":0}";
+            "{\"id\":\"31b353df3837c55dfb97e85l\",\"name\":\"SOL\",\"content\":" +
+                    "{\"highest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":12.2}}}",
+
+            "{\"id\":\"89b352df3235c55dib97e85f\",\"name\":\"SHIB\",\"content\":" +
+                    "{\"highest_price\":{\"time\":\"1900-01-01T01:01:00\",\"price\":9.0E-5}}}"};
+
+    String EXPECTED_PAGE = "{\"total_pages\":1,\"total_items\":2," +
+            "\"content\":[" +
+                "{\"id\":\"89b352df3235c55dib97e85f\",\"name\":\"SHIB\",\"last_price\":8.65E-5}," +
+                "{\"id\":\"31b353df3837c55dfb97e85l\",\"name\":\"SOL\",\"last_price\":9.97}]," +
+            "\"current_page\":0}";
 }

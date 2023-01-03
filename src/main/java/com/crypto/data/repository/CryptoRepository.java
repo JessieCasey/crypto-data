@@ -23,4 +23,5 @@ public interface CryptoRepository extends MongoRepository<Crypto, String> {
     boolean existsByName(String name);
 
     void deleteByName(String name);
+
 }

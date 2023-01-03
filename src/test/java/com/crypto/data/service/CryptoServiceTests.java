@@ -31,18 +31,16 @@ class CryptoServiceTests {
 
     @BeforeAll
     public void setUp() {
-        Crypto crypto1 = Crypto.builder().name("DOGE").lastPrice(0.83231f).prices(generateData(0.1f, 0.9f)).build();
-        Crypto crypto2 = Crypto.builder().name("SHIB").lastPrice(0.0000865f).prices(generateData(0.000001f, 0.00009f)).build();
-        Crypto crypto3 = Crypto.builder().name("SOL").lastPrice(9.97f).prices(generateData(8f, 12.2f)).build();
+        Crypto crypto1 = Crypto.builder().name("DOGE")
+                .lastPrice(0.83231f).prices(generateData(0.1f, 0.9f)).build();
+
+        Crypto crypto2 = Crypto.builder().name("SHIB")
+                .lastPrice(0.0000865f).prices(generateData(0.000001f, 0.00009f)).build();
+
+        Crypto crypto3 = Crypto.builder().name("SOL")
+                .lastPrice(9.97f).prices(generateData(8f, 12.2f)).build();
 
         cryptoRepository.saveAll(List.of(crypto1, crypto2, crypto3));
-    }
-
-    @AfterAll
-    public void deleteAll() {
-        cryptoRepository.deleteByName("DOGE");
-        cryptoRepository.deleteByName("SHIB");
-        cryptoRepository.deleteByName("SOL");
     }
 
     @DisplayName("JUnit test: fetch Currencies With Pagination And Sorting method")
@@ -171,6 +169,13 @@ class CryptoServiceTests {
                     .build());
         }
         return record;
+    }
+
+    @AfterAll
+    public void deleteAll() {
+        cryptoRepository.deleteByName("DOGE");
+        cryptoRepository.deleteByName("SHIB");
+        cryptoRepository.deleteByName("SOL");
     }
 
 }

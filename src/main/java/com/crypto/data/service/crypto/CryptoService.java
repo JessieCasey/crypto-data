@@ -11,13 +11,14 @@ import java.util.Map;
  */
 
 public interface CryptoService {
-    Crypto findCryptoByName(String name);
 
     Map<String, Object> fetchCurrenciesWithPaginationAndSorting(String name, int pageNumber, int size, String sortOrder);
 
     CryptoResponseDTO fetchCryptoWithTheMinPrice(String name);
 
     CryptoResponseDTO fetchCryptoWithTheMaxPrice(String name);
+
+    Crypto findCryptoByName(String name);
 
     List<Crypto> findAll();
 
