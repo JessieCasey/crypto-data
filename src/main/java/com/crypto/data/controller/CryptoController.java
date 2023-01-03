@@ -23,6 +23,7 @@ import java.time.LocalDate;
 @RequestMapping("api/cryptocurrencies")
 @Slf4j
 public class CryptoController {
+
     private final CryptoService cryptoService;
     private final CSVService csvService;
 
