@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 /**
- * Bootstrap class initiates DB
+ * Bootstrap class, which fetches the currencies and inserts them into the DB. The data are updated on each restart.
  * @author Artem Komarov
  */
 
