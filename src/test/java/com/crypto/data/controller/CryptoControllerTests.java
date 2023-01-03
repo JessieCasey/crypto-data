@@ -1,4 +1,4 @@
-package com.crypto.data;
+package com.crypto.data.controller;
 
 import com.crypto.data.entity.Crypto;
 import com.crypto.data.repository.CryptoRepository;
@@ -46,9 +46,11 @@ class CryptoControllerTests {
         this.mockMvc.perform(get(PATH + "/minprice?name=DOGE"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MIN[0])));
+
         this.mockMvc.perform(get(PATH + "/minprice?name=SOL"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MIN[1])));
+
         this.mockMvc.perform(get(PATH + "/minprice?name=SHIB"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MIN[2])));
@@ -60,9 +62,11 @@ class CryptoControllerTests {
         this.mockMvc.perform(get(PATH + "/maxprice?name=DOGE"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MAX[0])));
+
         this.mockMvc.perform(get(PATH + "/maxprice?name=SOL"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MAX[1])));
+
         this.mockMvc.perform(get(PATH + "/maxprice?name=SHIB"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(EXPECTED_MAX[2])));
@@ -79,6 +83,17 @@ class CryptoControllerTests {
         this.mockMvc.perform(get(PATH + "/minprice?name=" + notExistedName))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("\"message\":\"Crypto with the name '" + notExistedName + "' is not found\"")));
+    }
+
+    @DisplayName("JUnit test: fetch Crypto With The Highest and lowest Price with empty name")
+    @Test
+    public void fetchCryptoWithTheMaxAndMaxPriceWithEmpthy() throws Exception {
+        String notExistedName = " ";
+        this.mockMvc.perform(get(PATH + "/maxprice?name=" + notExistedName))
+                .andExpect(status().isBadRequest());
+
+        this.mockMvc.perform(get(PATH + "/minprice?name=" + notExistedName))
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("JUnit test: fetch Currencies With Pagination And Sorting")
